@@ -1,0 +1,261 @@
+@media screen and (min-width: 800px) {
+    .site {
+        margin: 3.4rem auto;
+        padding: 2.8rem;
+        max-width: 900px;
+        overflow: hidden;
+        box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .main-navigation li {
+        margin: 0 2.8rem 0 0;
+        position: relative;
+    }
+
+    .main-navigation li a,
+    .main-navigation li {
+        font-size: 1.0rem;
+    }
+
+    #footer {
+        margin-top: 4rem;
+    }
+	
+
+}
+
+@media screen and (max-width: 800px) {
+    .site {
+        margin: 0 auto;
+        padding: 1.2rem;
+        max-width: 800px;
+        overflow: hidden;
+    }
+
+    .main-navigation li {
+        margin: 0 1.8rem 0 0;
+        position: relative;
+    }
+
+    .main-navigation li a,
+    .main-navigation li {
+        font-size: 0.8rem;
+    }
+
+    #footer {
+        margin: 3rem 0 -.6rem 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .site {
+        padding: 0.8rem;
+        max-width: 400px;
+    }
+
+    .main-navigation li {
+        margin: 0 0.5rem 0 0;
+        position: relative;
+    }
+
+    section.list {
+        font-size: .8rem;
+    }
+
+    section.list > ul {
+        margin-left: -2rem;
+    }
+
+    ul > li {
+        list-style: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow:ellipsis;
+    }
+
+
+}
+
+html, body, div {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #7c7c7c;
+    font-family: Helvetica, Arial, "Microsoft YaHei", sans-serif;
+    color: #444444;
+}
+
+a {
+    color: #6bb044;
+    text-decoration: none;
+}
+
+a:hover,
+a:focus {
+    color: #000;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    color: #444444;
+}
+
+.site {
+    background-color: #fff;
+}
+
+section>img,p>img{
+    max-width: 100%;
+    margin: .6rem 0 .5rem 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    display: block;
+}
+
+/* Header */
+.site-header h1 {
+    color: #000;
+    font-size: 1.7rem;
+    line-height: 1.2rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.site-header h2 {
+    font-weight: normal;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #757575;
+}
+
+/*菜单导航*/
+.main-navigation {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.main-navigation ul.nav-menu,
+.main-navigation div.nav-menu > ul {
+    border-bottom: 1px solid #ededed;
+    border-top: 1px solid #ededed;
+    display: inline-block !important;
+    text-align: left;
+}
+
+.main-navigation ul {
+    margin: 0;
+    text-indent: 0;
+}
+
+.main-navigation li a,
+.main-navigation li {
+    display: inline-block;
+}
+
+.main-navigation li a {
+    border-bottom: 0;
+    line-height: 3.7;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+
+.main-navigation .current-menu-item > a {
+    color: #636363;
+    font-weight: bold;
+}
+
+#main > h1,
+section > h2 {
+    font-size: 1.0rem;
+    color: #444444;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+section > p {
+	margin-top:1em;
+    text-indent: 0em;
+    line-height: 1.4rem;
+}
+
+#main > p{
+	margin:1em 0 1em 0;
+}
+
+section {
+    margin-top: 2.4rem;
+}
+
+#toolbar{
+	margin-top:2em;
+}
+
+#footer {
+    text-align: center;
+    color: #939393;
+    font-size: .8rem;
+}
+
+#info_update {
+    margin-top: 2rem;
+    font-size: .9rem;
+    color: #939393;
+}
+
+section.small {
+    font-size: 0.8rem;
+}
+
+section > ul {
+    margin-left: -1rem;
+	margin-top:0.6rem;
+}
+
+ul > li {
+    line-height: 1.8rem;
+	margin-left: 1rem;
+}
+
+ol > li {
+    line-height: 1.5rem;
+	margin-left: 1rem;
+}
+
+
+ul.qa > li > span {
+    display: block;
+    padding: 0 0 .8rem 0;
+    color: #939393;
+    font-size: .8rem;
+}
+
+/*列表页面*/
+section.list ul {
+    margin-bottom: 2rem;
+}
+
+
+
+#flink{
+    margin-top: 2rem;
+    font-size: .88rem;
+}
+
+section.list_col2 li {
+    border-bottom: 1px dashed #ccc;
+    line-height: 2.1rem;
+    list-style: none;
+}
+
+section.list_col2 li span {
+    float: right;
+    font-size: .9rem;
+    color: #939393;
+}
+
+ul.list_about > li {
+    margin-bottom: .6rem;
+}
