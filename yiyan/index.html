@@ -32,6 +32,56 @@
     justify-content: flex-start;
     width: 100%;
   }
+  /* 挖空样式 */
+  .blank {
+    color: #007aff;
+    font-weight: bold;
+    padding: 0 8px;
+    border-bottom: 3px solid #007aff;
+  }
+  /* 选项容器 */
+  #options {
+    margin: 40px auto;
+    display: none;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+  /* 选项按钮 */
+  .option {
+    padding: 14px 24px;
+    font-size: 24px;
+    border: 2px solid #e5e5ea;
+    border-radius: 16px;
+    background: #f2f2f7;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .option:hover {
+    border-color: #007aff;
+    background: #e1f5ff;
+  }
+  .option.correct {
+    background: #34c759;
+    color: white;
+    border-color: #34c759;
+  }
+  .option.wrong {
+    background: #ff3b30;
+    color: white;
+    border-color: #ff3b30;
+  }
+  /* 结果提示 */
+  #result {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    margin: 20px 0;
+    display: none;
+  }
+  #result.correct { color: #34c759; }
+  #result.wrong { color: #ff3b30; }
+
   /* 译文 */
   #translation {
     margin: 0 auto 20px;
@@ -95,11 +145,12 @@
 
 <body>
   <div class="sentence" id="sentence"></div>
+  <div id="result"></div>
+  <div id="options"></div>
   <div id="translation"></div>
   <div id="source"></div>
 
   <div class="btn-group">
-    <!-- 新增：书籍选择下拉框 -->
     <select id="bookSelect" onchange="changeBook()">
       <option value="all">全部书籍</option>
       <option value="论语">论语</option>
@@ -114,14 +165,14 @@
     </select>
     
     <button class="btn-next" onclick="randomQuote()">换一句</button>
+    <button onclick="showTest()">挖词测试</button>
+    <button onclick="showNormal()">返回阅读</button>
     <button onclick="showTrans()">译文</button>
     <button onclick="showSource()">出处</button>
   </div>
 
 <script>
-// 名句数据（完全保留你原有的数据）
 const quotes = [
-
 // ==============================================
 // 论语（35句）
 // ==============================================
@@ -194,7 +245,7 @@ const quotes = [
 ["尽信书，则不如无书。","完全相信书本，还不如没有书。","《孟子·尽心下》"],
 ["民为贵，社稷次之，君为轻。","百姓最重要，土神谷神次之，君主最轻。","《孟子·尽心下》"],
 ["仁者无敌。","行仁政的人天下无敌。","《孟子·梁惠王上》"],
-["保民而王，莫之能御也。","安抚百姓而称王天下，没人能阻挡。","《孟子·梁惠王上》"],
+["保民而王，莫之可御也。","安抚百姓而称王天下，没人能阻挡。","《孟子·梁惠王上》"],
 ["君子莫大乎与人为善。","君子最重要的是同别人一道行善。","《孟子·公孙丑上》"],
 
 // ==============================================
@@ -437,33 +488,108 @@ const quotes = [
 ["从善如流。","听从正确意见像流水一样顺畅。","《左传·成公八年》"]
 ];
 
-// 新增：当前选中的书籍
 let currentBook = 'all';
+let isTestMode = false;
+let currentQuote = null;
+let correctWord = '';
 
 // 切换书籍
 function changeBook() {
   currentBook = document.getElementById('bookSelect').value;
-  randomQuote(); // 切换后立即刷新句子
+  if (isTestMode) showTest();
+  else randomQuote();
 }
 
-// 随机一句（支持按书籍筛选）
+// 正常阅读模式
 function randomQuote() {
-  let filteredQuotes = quotes;
-  // 如果不是全部，则筛选对应书籍
-  if (currentBook !== 'all') {
-    filteredQuotes = quotes.filter(item => item[2].includes(currentBook));
-  }
+  isTestMode = false;
+  let filtered = quotes;
+  if (currentBook !== 'all') filtered = quotes.filter(q => q[2].includes(currentBook));
   
-  const i = Math.floor(Math.random() * filteredQuotes.length);
-  const [sentence, trans, source] = filteredQuotes[i];
+  const idx = Math.floor(Math.random() * filtered.length);
+  const [sen, trans, source] = filtered[idx];
   
-  document.getElementById('sentence').innerText = sentence;
+  document.getElementById('sentence').innerText = sen;
   document.getElementById('translation').innerText = trans;
   document.getElementById('source').innerText = source;
   
-  // 切换新句子后自动隐藏译文和出处
   document.getElementById('translation').style.display = 'none';
   document.getElementById('source').style.display = 'none';
+  document.getElementById('options').style.display = 'none';
+  document.getElementById('result').style.display = 'none';
+}
+
+// 挖词测试模式
+function showTest() {
+  isTestMode = true;
+  let filtered = quotes;
+  if (currentBook !== 'all') filtered = quotes.filter(q => q[2].includes(currentBook));
+  
+  const idx = Math.floor(Math.random() * filtered.length);
+  currentQuote = filtered[idx];
+  const [sentence] = currentQuote;
+
+  // 随机挖一个两字词/关键字
+  const words = sentence.match(/[\u4e00-\u9fa5]{2}/g) || [];
+  if (words.length < 1) { randomQuote(); return; }
+  
+  const blankIdx = Math.floor(Math.random() * words.length);
+  correctWord = words[blankIdx];
+  const blanked = sentence.replace(correctWord, '<span class="blank">　　</span>');
+  
+  document.getElementById('sentence').innerHTML = blanked;
+  document.getElementById('translation').style.display = 'none';
+  document.getElementById('source').style.display = 'none';
+  document.getElementById('result').style.display = 'none';
+  
+  // 生成选项：1正确 + 3干扰
+  const allWords = [...new Set(quotes.flatMap(q => q[0].match(/[\u4e00-\u9fa5]{2}/g) || []))];
+  let options = [correctWord];
+  while (options.length < 4) {
+    const w = allWords[Math.floor(Math.random() * allWords.length)];
+    if (!options.includes(w)) options.push(w);
+  }
+  options.sort(() => Math.random() - 0.5); // 打乱
+  
+  const optEl = document.getElementById('options');
+  optEl.innerHTML = '';
+  options.forEach(w => {
+    const b = document.createElement('div');
+    b.className = 'option';
+    b.innerText = w;
+    b.onclick = () => checkAnswer(w);
+    optEl.appendChild(b);
+  });
+  optEl.style.display = 'flex';
+}
+
+// 检查答案
+function checkAnswer(select) {
+  const opts = document.querySelectorAll('.option');
+  const res = document.getElementById('result');
+  
+  opts.forEach(o => {
+    if (o.innerText === correctWord) o.classList.add('correct');
+    else o.classList.remove('correct');
+    
+    if (o.innerText === select && o.innerText !== correctWord) o.classList.add('wrong');
+    else o.classList.remove('wrong');
+  });
+  
+  res.style.display = 'block';
+  if (select === correctWord) {
+    res.innerText = '✅ 回答正确！';
+    res.className = 'correct';
+    setTimeout(() => showTest(), 1200);
+  } else {
+    res.innerText = '❌ 再试一次';
+    res.className = 'wrong';
+  }
+}
+
+// 返回阅读
+function showNormal() {
+  randomQuote();
 }
 
 // 显示译文
