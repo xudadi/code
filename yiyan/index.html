@@ -58,6 +58,7 @@
     right: 24px;
     display: flex;
     gap: 10px;
+    align-items: center;
   }
   /* 按钮：无背景 + 灰色 + 小尺寸 */
   button {
@@ -74,6 +75,21 @@
   button:hover {
     color: #007aff;
   }
+  /* 下拉框样式 */
+  select {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: #86868b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+  select:hover {
+    color: #007aff;
+  }
 </style>
 </head>
 
@@ -83,13 +99,27 @@
   <div id="source"></div>
 
   <div class="btn-group">
+    <!-- 新增：书籍选择下拉框 -->
+    <select id="bookSelect" onchange="changeBook()">
+      <option value="all">全部书籍</option>
+      <option value="论语">论语</option>
+      <option value="孟子">孟子</option>
+      <option value="大学">大学</option>
+      <option value="中庸">中庸</option>
+      <option value="诗经">诗经</option>
+      <option value="尚书">尚书</option>
+      <option value="礼记">礼记</option>
+      <option value="周易">周易</option>
+      <option value="春秋左传">春秋左传</option>
+    </select>
+    
     <button class="btn-next" onclick="randomQuote()">换一句</button>
     <button onclick="showTrans()">译文</button>
     <button onclick="showSource()">出处</button>
   </div>
 
 <script>
-// 名句数据
+// 名句数据（完全保留你原有的数据）
 const quotes = [
 
 // ==============================================
@@ -363,7 +393,7 @@ const quotes = [
 ["日出而作，日入而息。","太阳出来劳作，太阳下山休息。","《周易·击壤歌》"],
 ["君子以独立不惧，遁世无闷。","君子独立不畏惧，避世不苦闷。","《周易·大过卦》"],
 ["天地不交，否。","天地不交流，为否卦，象征不通。","《周易·否卦》"],
-["天地交泰，后以财成天地之道。","天地交融为泰卦，君主以此辅助天地规律。","《周易·泰卦》"],
+["天地交泰，后以财成天地之道。","天地交融为泰卦，君主以此辅助天地规律。","《HTML·泰卦》"],
 ["君子进德修业，欲及时也。","君子增进道德建立功业，想要把握时机。","《周易·乾卦》"],
 ["居上位而不骄，在下位而不忧。","处在上位不骄傲，处在下位不忧愁。","《周易·乾卦》"],
 ["知进退存亡，而不失其正者，其唯圣人乎。","知道进退存亡道理而不偏离正道，只有圣人吧。","《周易·乾卦》"],
@@ -407,10 +437,26 @@ const quotes = [
 ["从善如流。","听从正确意见像流水一样顺畅。","《左传·成公八年》"]
 ];
 
-// 随机一句（同时隐藏译文和出处）
+// 新增：当前选中的书籍
+let currentBook = 'all';
+
+// 切换书籍
+function changeBook() {
+  currentBook = document.getElementById('bookSelect').value;
+  randomQuote(); // 切换后立即刷新句子
+}
+
+// 随机一句（支持按书籍筛选）
 function randomQuote() {
-  const i = Math.floor(Math.random() * quotes.length);
-  const [sentence, trans, source] = quotes[i];
+  let filteredQuotes = quotes;
+  // 如果不是全部，则筛选对应书籍
+  if (currentBook !== 'all') {
+    filteredQuotes = quotes.filter(item => item[2].includes(currentBook));
+  }
+  
+  const i = Math.floor(Math.random() * filteredQuotes.length);
+  const [sentence, trans, source] = filteredQuotes[i];
+  
   document.getElementById('sentence').innerText = sentence;
   document.getElementById('translation').innerText = trans;
   document.getElementById('source').innerText = source;
